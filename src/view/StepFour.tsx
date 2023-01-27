@@ -1,16 +1,15 @@
 import { useForm } from "react-hook-form";
-import { useAppStateContext } from "../../context";
-import { IUser } from "../../interfaces/IUser";
+import { useFormContext } from "../context/FormContext";
+import { IUser } from "../interfaces/IUser";
 import { Button, Form, Section, SectionRow } from "../ui";
 
 export const StepFour = () => {
-  const { state } = useAppStateContext();
+  const { state } = useFormContext();
   const { handleSubmit } = useForm({ defaultValues: state });
 
   console.log(state);
 
-  const submitData = (data: IUser) => {
-    console.info(data);
+  const submitData = (data: any) => {
     // Submit data to the server
   };
 
@@ -29,9 +28,9 @@ export const StepFour = () => {
       title: "Step 2",
       url: "/stepTwo",
       items: [
-        { name: "date of birth", value: state.dateOfBirth },
+        { name: "date of birth", value: state.birthdate },
         { name: "address", value: state.address },
-        { name: "spoken language", value: state.spokenLanguage },
+        { name: "spoken language", value: state.languages },
         { name: "height", value: state.height },
         { name: "weight", value: state.weight },
       ],
@@ -39,7 +38,7 @@ export const StepFour = () => {
     {
       title: "Step 3",
       url: "/stepThree",
-      items: [{ name: "accept_condition", value: state.isConfirm }],
+      items: [{ name: "accept_condition", value: state.accept }],
     },
   ];
 

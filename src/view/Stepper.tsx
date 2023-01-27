@@ -1,9 +1,9 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useAppStateContext } from "../../context";
+import { useFormContext } from "../context/FormContext";
 
 export const Stepper = ({ onStepChange }: any) => {
-  const { state } = useAppStateContext();
+  const { state } = useFormContext();
   const location = useLocation();
   const [steps, setSteps] = useState<any>([]);
 

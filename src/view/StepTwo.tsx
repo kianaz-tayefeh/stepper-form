@@ -4,30 +4,12 @@ import { z } from "zod";
 import { Button, Field, Form, Input, CheckBoxListGroup } from "../ui";
 import { forwardRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppStateContext } from "../../context";
-
-const spokenLanguages = ["german", "french", "spanish", "italian"] as const;
-
-const userDetailsSchema = z.object({
-  dateOfBirth: z.string(),
-  address: z.string(),
-  spokenLanguage: z.union([z.enum(spokenLanguages), z.null()]),
-  height: z
-    .union([z.number({ invalid_type_error: "please enter number" }), z.null()])
-    .refine((val) => val !== null && 45 <= +val && +val <= 250, {
-      message: "height must between 45 and 250",
-    }),
-  weight: z
-    .union([z.number({ invalid_type_error: "please enter number" }), z.null()])
-    .refine((val) => val !== null && 100 <= +val && +val <= 230, {
-      message: "weight must between 100 and 230",
-    }),
-});
-
-type UserDetailsType = z.infer<typeof userDetailsSchema>;
+import { useFormContext } from "../context/FormContext";
+import { schema_step2, UserDetailsType } from "../constants/FormSchema";
+import { LanguageEnum, LANGUAGES_OPTIONS } from "../constants/options";
 
 export const StepTwo = forwardRef((props, ref) => {
-  const { state, setState } = useAppStateContext();
+  const { state, setState } = useFormContext();
   const navigate = useNavigate();
 
   const {
@@ -37,14 +19,8 @@ export const StepTwo = forwardRef((props, ref) => {
     formState: { errors, isSubmitting, isSubmitted, isDirty, isValid },
   } = useForm<UserDetailsType>({
     mode: "onChange",
-    resolver: zodResolver(userDetailsSchema),
-    defaultValues: {
-      dateOfBirth: "",
-      address: "",
-      spokenLanguage: null,
-      weight: null,
-      height: null,
-    },
+    resolver: zodResolver(schema_step2),
+    defaultValues: state,
   });
 
   const onSubmit = (userDetails: UserDetailsType) => {
@@ -56,12 +32,12 @@ export const StepTwo = forwardRef((props, ref) => {
   return (
     <Form onSubmit={handleSubmit(onSubmit)} nextStep={"/stepThree"}>
       <div className="grid gap-6 mb-6 md:grid-cols-2 p-4">
-        <Field label="Date Of Birth" error={errors?.dateOfBirth?.message}>
+        <Field label="Birth Date" error={errors?.birthdate?.message}>
           <Input
-            {...register("dateOfBirth")}
+            {...register("birthdate")}
             placeholder="Select date"
-            aria-invalid={Boolean(errors.dateOfBirth)}
-            id="dateOfBirth"
+            aria-invalid={Boolean(errors.birthdate)}
+            id="birthdate"
             type="date"
           />
         </Field>
@@ -92,10 +68,10 @@ export const StepTwo = forwardRef((props, ref) => {
         </Field>
 
         <CheckBoxListGroup
-          title="Spoken Languages"
-          {...register("spokenLanguage")}
-          aria-invalid={Boolean(errors.spokenLanguage)}
-          checkBoxList={spokenLanguages}
+          title="Languages"
+          {...register("languages")}
+          aria-invalid={Boolean(errors.languages)}
+          checkBoxList={LANGUAGES_OPTIONS}
         />
       </div>
       <div className="grid grid-cols-2 gap-9">

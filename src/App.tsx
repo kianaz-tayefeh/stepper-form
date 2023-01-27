@@ -1,13 +1,7 @@
 import { useRef } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import {
-  StepFour,
-  StepOne,
-  Stepper,
-  StepThree,
-  StepTwo,
-} from "./components/steps";
-import { AppStateContextProvider } from "./context";
+import { StepFour, StepOne, Stepper, StepThree, StepTwo } from "./view";
+import { FormProvider } from "./context/FormContext";
 
 import "./App.css";
 
@@ -19,7 +13,7 @@ function App() {
   };
   return (
     <div className="App">
-      <AppStateContextProvider>
+      <FormProvider>
         <BrowserRouter>
           <Stepper onStepChange={onStepChange} />
           <Routes>
@@ -30,7 +24,7 @@ function App() {
             {/* <Route path="/stepFour" element={<Confirm ref={buttonRef} />} /> */}
           </Routes>
         </BrowserRouter>
-      </AppStateContextProvider>
+      </FormProvider>
     </div>
   );
 }
